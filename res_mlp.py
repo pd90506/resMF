@@ -13,6 +13,7 @@ from utils import init_normal
 def res_mlp_model(num_items, factor=10, layers = [20,10], reg_layers=[0,0]):
     """res_mlp_model, the first and last layer of mlp should be of the same size!"""
     assert len(layers) == len(reg_layers)
+    assert factor == layers[-1]
     # define inputs
     item_input = Input(shape=(1,), dtype='int32', name = 'item_input')
 

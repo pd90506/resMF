@@ -11,6 +11,15 @@ from res_mlp import res_mlp_model
 from utils import init_normal
 
 def res_gmf_model(num_users, num_items, factor=10, layers=[10], reg_mf=0, reg_layers=[0]):
+    """
+    Args: 
+        num_users: number of users
+        num_items: number of items
+        factor: embedding factor
+        layers: mlp layers
+        reg_mf: gmf regularization coef
+        reg_layers: mlp layers regularizations
+    """
     assert len(layers) == len(reg_layers)    
 
     # Input variables
