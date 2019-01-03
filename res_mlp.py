@@ -10,16 +10,16 @@ from mlp import mlp_model
 from utils import init_normal
 
 
-def res_mlp_model(num_items, factor=10, layers = [20,10], reg_layers=[0,0]):
+def res_mlp_model(num_items, factor=10, layers = [20,10], emb_reg=0, reg_layers=[0,0]):
     """res_mlp_model, the first and last layer of mlp should be of the same size!"""
     assert len(layers) == len(reg_layers)
-    assert factor == layers[-1]
+    assert factor == layers[-1] # this must hold because a residual is added
     # define inputs
     item_input = Input(shape=(1,), dtype='int32', name = 'item_input')
 
     # define components
     embedding_item = Embedding(input_dim = num_items, output_dim = int(factor), name = 'item_embedding',
-                                  embeddings_initializer = init_normal(), embeddings_regularizer = l2(reg_layers[0]), input_length=1)  
+                                  embeddings_initializer = init_normal(), embeddings_regularizer = l2(emb_reg), input_length=1)  
     mlp = mlp_model(factor, layers, reg_layers)
     
     # construct network

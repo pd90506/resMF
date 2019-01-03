@@ -10,7 +10,7 @@ from gmf import gmf_model
 from res_mlp import res_mlp_model
 from utils import init_normal
 
-def res_gmf_model(num_users, num_items, factor=10, layers=[10], reg_mf=0, reg_layers=[0]):
+def res_gmf_model(num_users, num_items, factor=10, layers=[10], reg_mf=0, emb_reg=0, reg_layers=[0]):
     """
     Args: 
         num_users: number of users
@@ -18,6 +18,7 @@ def res_gmf_model(num_users, num_items, factor=10, layers=[10], reg_mf=0, reg_la
         factor: embedding factor
         layers: mlp layers
         reg_mf: gmf regularization coef
+        emb_reg: embedding regularization
         reg_layers: mlp layers regularizations
     """
     assert len(layers) == len(reg_layers)    
@@ -28,8 +29,8 @@ def res_gmf_model(num_users, num_items, factor=10, layers=[10], reg_mf=0, reg_la
 
     # define model components
     # the user and item factor can be different
-    user_res_mlp = res_mlp_model(num_users, factor=factor, layers=layers, reg_layers=reg_layers)
-    item_res_mlp = res_mlp_model(num_items, factor=factor, layers=layers, reg_layers=reg_layers)
+    user_res_mlp = res_mlp_model(num_users, factor=factor, layers=layers, emb_reg=emb_reg, reg_layers=reg_layers)
+    item_res_mlp = res_mlp_model(num_items, factor=factor, layers=layers, emb_reg=emb_reg, reg_layers=reg_layers)
     gmf = gmf_model(input_dim=layers[-1], reg=reg_mf)
 
     # construct model
@@ -44,7 +45,7 @@ def res_gmf_model(num_users, num_items, factor=10, layers=[10], reg_mf=0, reg_la
 if __name__ == '__main__':
     NUM_ITEMS = 1000
     NUM_USERS = 500
-    model = res_gmf_model(NUM_USERS, NUM_USERS, factor=10, layers=[10,10], reg_mf=0, reg_layers=[0,0])
+    model = res_gmf_model(NUM_USERS, NUM_USERS, factor=10, layers=[10,10], reg_mf=0, emb_reg=0, reg_layers=[0,0])
    # mlp.compile('rmsprop', 'mse')
     user_input = tf.random_uniform(shape=(100,1), maxval=1000, dtype=tf.int32)
     item_input = tf.random_uniform(shape=(100,1), maxval=1000, dtype=tf.int32)
